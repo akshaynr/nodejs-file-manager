@@ -1,6 +1,8 @@
-import { argv, stdin, exit } from 'node:process';
-import { FILE_MANAGER_COMMANDS } from './constants.js';
-import { executeOSCommand } from './os-commands.js';
+import { argv, stdin, exit, cwd, chdir } from 'node:process';
+import { FILE_MANAGER_COMMANDS, DIR_COMMANDS } from './constants.js';
+import { navigateOneLevelUp, changeDirectory } from './dir-commands.js';
+import { OS_EOL, OS_ROOT_DIRECTORY, executeOSCommand } from './os-commands.js';
+import { listDirectoryContents } from './fs-commands.js';
 
 export const setDefaultEncoding = (encoding = 'utf8') => stdin.setEncoding(encoding);
 
@@ -30,13 +32,32 @@ export const executeCommand = (command, arg1, arg2) => {
         case FILE_MANAGER_COMMANDS.EXIT:
             terminateProcess(username);
             break;
+        case DIR_COMMANDS.NAVIGATE_UP:
+            navigateOneLevelUp();
+            break;
+        case DIR_COMMANDS.CHANGE_DIRECTORY:
+            changeDirectory(arg1);
+            break;
+        case DIR_COMMANDS.LIST_FILES:
+            listDirectoryContents();
+            break;
         case FILE_MANAGER_COMMANDS.OS:
             executeOSCommand(arg1);
             break;
         default:
-            invalidCommand(command);
+            invalidInputMsg(command);
             break;
     }
 };
 
-export const invalidCommand = (command) => console.log(`Command not recognized: ${command}`);
+export const invalidInputMsg = (command) => console.log(`Invalid input: ${command}`);
+
+export const operationFailedMsg = () => console.log(`Operation failed`);
+
+export const setHomeDirectory = () => {
+    chdir(OS_ROOT_DIRECTORY);
+}
+
+export const logWorkingDirectory = () => {
+    console.log(`${OS_EOL}You are currently in ${cwd()}${OS_EOL}`);
+}

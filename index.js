@@ -1,11 +1,12 @@
 import { stdin as input, stdout as output } from 'node:process';
-import { getArgumentUserName, terminateProcess, executeCommand } from './utils.js';
+import { getArgumentUserName, terminateProcess, executeCommand, logWorkingDirectory, setHomeDirectory } from './utils.js';
 
-// setDefaultEncoding();
+setHomeDirectory();
+
 const userName = getArgumentUserName();
 
-
 console.log(`Welcome to the File Manager, ${userName}!`);
+output.write('> ');
 
 input.on('data', (data) => {
     const dataStr = data.toString().trim();
@@ -13,7 +14,10 @@ input.on('data', (data) => {
     const [command, arg1, arg2] = dataStr.trim().split(' ');
     console.log(`Command: ${command}, Arg1: ${arg1}, Arg2: ${arg2}`);
 
+    logWorkingDirectory();
     executeCommand(command, arg1, arg2);
+    logWorkingDirectory();
+    output.write('> ');
 });
 
 process.on('SIGINT', () => {

@@ -1,13 +1,9 @@
-import { EOL, cpus, homedir, userInfo, arch } from 'node:os'
- 
-const OS_COMMANDS = {
-    EOL: '--EOL',
-    CPUS: '--cpus',
-    HOME_DIR: '--homedir',
-    USER_NAME: '--username',
-    ARCH: '--architecture',
-}
+import { EOL, cpus, homedir, userInfo } from 'node:os';
+import { OS_COMMANDS } from './constants.js';
 
+export const OS_EOL = EOL;
+
+export const OS_ROOT_DIRECTORY = homedir();
 
 export const executeOSCommand = (arg) => {
     switch (arg) {
