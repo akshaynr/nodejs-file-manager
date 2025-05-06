@@ -1,8 +1,10 @@
 import { argv, stdin, exit, cwd, chdir } from 'node:process';
-import { FILE_MANAGER_COMMANDS, DIR_COMMANDS } from './constants.js';
+import { FILE_MANAGER_COMMANDS, DIR_COMMANDS, FS_COMMANDS, HASH_COMMANDS, ZIP_COMMANDS } from './constants.js';
 import { navigateOneLevelUp, changeDirectory } from './dir-commands.js';
 import { OS_EOL, OS_ROOT_DIRECTORY, executeOSCommand } from './os-commands.js';
-import { listDirectoryContents } from './fs-commands.js';
+import { addFile, copyFile, createDirectory, deleteFile, listDirectoryContents, moveFile, readFile, renameFile } from './fs-commands.js';
+import { hashFile } from './hash-commands.js';
+import { compressFile, decompressFile } from './zip-commands.js';
 
 export const setDefaultEncoding = (encoding = 'utf8') => stdin.setEncoding(encoding);
 
@@ -22,7 +24,7 @@ export const getArgumentUserName = () => {
 }
 
 export const terminateProcess = (username) => {
-    console.log(`Thank you for using File Manager, ${username}, goodbye!`);
+    console.log(`${OS_EOL}Thank you for using File Manager, ${username}, goodbye!`);
     exit();
 }
 
@@ -40,6 +42,39 @@ export const executeCommand = (command, arg1, arg2) => {
             break;
         case DIR_COMMANDS.LIST_FILES:
             listDirectoryContents();
+            break;
+        case DIR_COMMANDS.LIST_FILES:
+            listDirectoryContents();
+            break;
+        case HASH_COMMANDS.HASH:
+            hashFile(arg1);
+            break;
+        case ZIP_COMMANDS.COMPRESS_FILE:
+            compressFile(arg1, arg2);
+            break;
+        case ZIP_COMMANDS.DECOMPRESS_FILE:
+            decompressFile(arg1, arg2);
+            break;
+        case FS_COMMANDS.CREATE_DIRECTORY:
+            createDirectory(arg1);
+            break;
+        case FS_COMMANDS.ADD_FILE:
+            addFile(arg1);
+            break;
+        case FS_COMMANDS.RENAME_FILE:
+            renameFile(arg1, arg2);
+            break;
+        case FS_COMMANDS.COPY_FILE:
+            copyFile(arg1, arg2);
+            break;
+        case FS_COMMANDS.DELETE_FILE:
+            deleteFile(arg1);
+            break;
+        case FS_COMMANDS.MOVE_FILE:
+            moveFile(arg1, arg2);
+            break;
+        case FS_COMMANDS.READ_FILE:
+            readFile(arg1);
             break;
         case FILE_MANAGER_COMMANDS.OS:
             executeOSCommand(arg1);
